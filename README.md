@@ -121,7 +121,6 @@ import configureStore from '../store/configureStore';
 import App from '../containers/App';
 
 const preloadedState = window.__PRELOADED_STATE__;
-
 const store = configureStore(preloadedState);
 
 render(
