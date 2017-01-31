@@ -7,8 +7,6 @@ module.exports = {
     path: 'public/build',
     filename: '[name].bundle.js',
   },
-  plugins: [
-  ],
   module: {
     loaders: [
       {
