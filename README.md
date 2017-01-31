@@ -2,7 +2,7 @@
 
 ## A JavaScript server side rendering interface
 
-**Bracoa** provids a simple interface for JavaScript server side rendering with PHP. 
+**Bracoa** provides a simple interface for JavaScript server side rendering in PHP.
 
 ## Prerequisites
 
