@@ -9,7 +9,7 @@ namespace Koriym\Baracoa;
 use Koriym\Baracoa\Exception\JsFileNotExistsException;
 use V8Js;
 
-final class Baracoa
+final class Baracoa implements BaracoaInterface
 {
     /**
      * @var string
