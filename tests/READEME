@@ -1,0 +1,3 @@
+cd docs/example/redux-react/
+yarn install
+yarn run build

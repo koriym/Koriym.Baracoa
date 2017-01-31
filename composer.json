@@ -1,0 +1,58 @@
+{
+    "name": "koriym/js-view",
+    "description": "Javascript server side rendering using v8js",
+    "keywords": [
+        "Skeleton",
+        "PSR"
+    ],
+    "homepage": "https://github.com/koriym/PHP.Skeleton",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Akihito Koriyama",
+            "email": "akihito.koriyama@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "require-dev": {
+        "phpv8/v8js-stubs": "^1.2.0",
+        "phpunit/phpunit": "~4.8 || ~5.7",
+        "squizlabs/php_codesniffer": "~2.7",
+        "phpmd/phpmd": "~2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Koriym\\Baracoa\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Koriym\\Baracoa\\": [
+                "tests/",
+                "tests/Fake"
+            ],
+            "V8Js\\": "vendor/phpv8/v8js-stubs/src"
+        }
+    },
+    "scripts": {
+        "test": [
+            "phpmd src text ./phpmd.xml",
+            "phpcs src tests/*.php",
+            "phpunit"
+        ],
+        "cs-fix": [
+            "php-cs-fixer fix --config-file=./.php_cs",
+            "phpcbf src"
+        ],
+        "build": [
+            "rm -rf ./build; mkdir -p ./build/logs ./build/pdepend ./build/api",
+            "pdepend --jdepend-xml=./build/logs/jdepend.xml --jdepend-chart=./build/pdepend/dependencies.svg --overview-pyramid=./build/pdepend/overview-pyramid.svg src",
+            "phploc --log-csv ./build/logs/phploc.csv src",
+            "phpcs --report=checkstyle --report-file=./build/logs/checkstyle.xml --standard=phpcs.xml src",
+            "apigen generate -s src -d build/api --debug",
+            "@test"
+        ]
+    }
+}
