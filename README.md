@@ -144,7 +144,7 @@ See more detail in this blog post.
 
 ```
 git clone git@github.com:koriym/Koriym.Baracoa.git
-cd Koriym.ReduxReactSsr
+cd Koriym.Baracoa
 composer install
 cd docs/example/handlesbar
 yarn install
@@ -156,7 +156,7 @@ yarn start
 
 ```
 git clone git@github.com:koriym/Koriym.Baracoa.git
-cd Koriym.ReduxReactSsr
+cd Koriym.Baracoa
 composer install
 cd docs/example/redux-react
 yarn install
