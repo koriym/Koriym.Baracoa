@@ -64,7 +64,7 @@ final class Baracoa implements BaracoaInterface
         $storeJson = json_encode($store);
         $metasJson = json_encode($metas);
         $code = <<< "EOT"
-var console = {warn: function(){}, error: print};
+var console = {warn: function(){}, error: function(){}};
 var global = global || this, self = self || this, window = window || this;
 window.__PRELOADED_STATE__ = {$storeJson};
 window.__SSR_METAS__ = {$metasJson};
