@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "ext-v8js": ">=1.3.0"
+        "ext-v8js": ">=1.3.0",
+        "nacmartin/phpexecjs": "^0.8.7"
     },
     "require-dev": {
         "phpv8/v8js-stubs": "^1.2.0",
