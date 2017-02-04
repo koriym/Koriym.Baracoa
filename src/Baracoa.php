@@ -7,6 +7,7 @@
 namespace Koriym\Baracoa;
 
 use Koriym\Baracoa\Exception\JsFileNotExistsException;
+use Nacmartin\PhpExecJs\PhpExecJs;
 use V8Js;
 
 final class Baracoa implements BaracoaInterface
@@ -26,16 +27,21 @@ final class Baracoa implements BaracoaInterface
      */
     private $v8;
 
+    private $execJs;
+
     /**
      * @param string                    $bundleSrcBasePath Bundled application code base dir path
      * @param ExceptionHandlerInterface $handler           V8JsScriptException exception handler
      * @param V8Js                      $v8Js              V8Js exception handler
      */
-    public function __construct(string $bundleSrcBasePath, ExceptionHandlerInterface $handler, V8Js $v8Js)
+    public function __construct(string $bundleSrcBasePath, ExceptionHandlerInterface $handler, V8Js $v8Js = null)
     {
         $this->bundleSrcBasePath = $bundleSrcBasePath;
         $this->handler = $handler;
         $this->v8 = $v8Js;
+        if (is_null($v8Js)) {
+            $this->execJs = new PhpExecJs();
+        }
     }
 
     /**
@@ -50,13 +56,22 @@ final class Baracoa implements BaracoaInterface
         $bundleSrc = file_get_contents($bundleSrcPath);
         $code = $this->getSsrCode($bundleSrc, $store, $metas);
         try {
-            $html = (string) $this->v8->executeString($code);
+            $html = $this->execCode($code);
         } catch (\V8JsScriptException $e) {
             $handler = $this->handler;
             $html = $handler($e);
         }
 
         return $html;
+    }
+
+    private function execCode(string $code) : string
+    {
+        if ($this->v8 instanceof V8Js) {
+            return (string) $this->v8->executeString($code);
+        }
+
+        return (string) $this->execJs->evalJs($code);
     }
 
     private function getSsrCode($bundleSrc, array $store, array $metas) : string
