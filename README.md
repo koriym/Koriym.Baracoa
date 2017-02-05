@@ -189,3 +189,7 @@ edit `php.ini` or add 'V8Js.ini'
 ```
 extension="/usr/local/opt/php71-v8js/v8js.so"
 ```
+
+## JS UI Application Skeleton
+
+[UiSkeleton](https://github.com/koriym/Koriym.JsUiSkeleton) is a Javascript UI application skeleton with  hot module loader, browsersync, test, lint and more for development.
