@@ -1,13 +1,12 @@
 <?php
+namespace Koriym\Baracoa;
+
 require dirname(__DIR__, 4) . '/vendor/autoload.php';
 
-use Koriym\Baracoa\ExceptionHandler;
-use Koriym\Baracoa\Baracoa;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 
 $jsBundleDir = __DIR__ . '/build';
-
-$cache = new \Cache\Adapter\Filesystem\FilesystemCachePool(new \League\Flysystem\Filesystem(new \League\Flysystem\Adapter\Local(__DIR__ . '/')));
-$baracoa = new \Koriym\Baracoa\CacheBaracoa($jsBundleDir, new ExceptionHandler(), $cache);
+$baracoa = new CacheBaracoa($jsBundleDir, new ExceptionHandler(), new FilesystemCache());
 $state = ['hello' => ['name' => 'SSR']];
 $metas = ['title' => '<page-title>'];
 $html = $baracoa->render('index_ssr', $state, $metas);

@@ -9,6 +9,7 @@ namespace Koriym\Baracoa;
 use Koriym\Baracoa\Exception\JsFileNotExistsException;
 use Nacmartin\PhpExecJs\PhpExecJs;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
 use V8Js;
 
 final class CacheBaracoa implements BaracoaInterface
@@ -19,7 +20,7 @@ final class CacheBaracoa implements BaracoaInterface
     private $bundleSrcBasePath;
 
     /**
-     * @var CacheItemPoolInterface
+     * @var CacheInterface
      */
     private $cache;
 
@@ -28,7 +29,7 @@ final class CacheBaracoa implements BaracoaInterface
      */
     private $handler;
 
-    public function __construct(string $bundleSrcBasePath, ExceptionHandlerInterface $handler, CacheItemPoolInterface $cache)
+    public function __construct(string $bundleSrcBasePath, ExceptionHandlerInterface $handler, CacheInterface $cache)
     {
         $this->bundleSrcBasePath = $bundleSrcBasePath;
         $this->handler = $handler;
@@ -40,10 +41,10 @@ final class CacheBaracoa implements BaracoaInterface
      */
     public function render(string $appName, array $store, array $metas = []) : string
     {
-        if (! $this->cache->hasItem($appName)) {
+        if (! $this->cache->has($appName)) {
             $this->saveSnapshot($appName);
         }
-        $snapShot = $this->cache->getItem($appName)->get();
+        $snapShot = $this->cache->get($appName);
         $v8 = new V8Js('PHP', [], [], true, $snapShot);
         try {
             $html = $v8->executeString($this->getSsrCode($store, $metas));
@@ -66,8 +67,7 @@ final class CacheBaracoa implements BaracoaInterface
         }
         $bundleSrc = file_get_contents($bundleSrcPath);
         $snapShot = \V8Js::createSnapshot($bundleSrc);
-        $item = $this->cache->getItem($appName)->set($snapShot);
-        $this->cache->save($item);
+        $this->cache->set($appName, $snapShot);
     }
 
     private function getSsrCode(array $store, array $metas) : string
