@@ -1,4 +1,0 @@
-cd docs/example/handlesbar/
-yarn install
-yarn run build
-yarn start

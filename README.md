@@ -143,30 +143,37 @@ See more detail in this blog post.
 
 ## Run demo
 
-### handlebar
+### min
 
 ```
 git clone git@github.com:koriym/Koriym.Baracoa.git
 cd Koriym.Baracoa
 composer install
+cd docs/example/min
+php index.php
+// HelloWorld
+```
+
+### handlebar
+
+```
 cd docs/example/handlesbar
 yarn install
 yarn run build
-yarn start
+php public/index.php
+
+// <!doctype html>
+// ...
 ```
 
 ### redux react
 
 ```
-git clone git@github.com:koriym/Koriym.Baracoa.git
-cd Koriym.Baracoa
-composer install
-cd docs/example/redux-react
+cd docs/example/redux
 yarn install
 yarn run build
 yarn start
 ```
-
 
 ## Install V8Js
 
@@ -182,4 +189,3 @@ edit `php.ini` or add 'V8Js.ini'
 ```
 extension="/usr/local/opt/php71-v8js/v8js.so"
 ```
-
