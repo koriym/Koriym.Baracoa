@@ -129,7 +129,14 @@ render(
 
 ## Performance boost 
 
-Use [custom startup snapshots](http://v8project.blogspot.jp/2015/09/custom-startup-snapshots.html) to boost V8 performance.
+```php
+$cache = new FilesystemCache() // PSR-16
+$baracoa = new CacheBaracoa($appBundleJsPath, new ExceptionHandler(), $cache);
+```
+An *external* "snapshot" is saved to increase performance in each app with `CacheBaracoa`.
+Highly recommended in production site.
+Consider *internal* snapshot for more performance.
+
 See more detail in this blog post.
 
 * [20x performance boost with V8Js snapshots](http://stesie.github.io/2016/02/snapshot-performance)
