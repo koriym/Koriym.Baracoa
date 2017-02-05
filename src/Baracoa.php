@@ -81,10 +81,8 @@ final class Baracoa implements BaracoaInterface
         $code = <<< "EOT"
 var console = {warn: function(){}, error: function(){}};
 var global = global || this, self = self || this, window = window || this;
-window.__PRELOADED_STATE__ = {$storeJson};
-window.__SSR_METAS__ = {$metasJson};
 {$bundleSrc}
-window.__SERVER_SIDE_MARKUP__;
+render($storeJson, $metasJson);
 EOT;
 
         return $code;
