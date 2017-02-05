@@ -10,7 +10,7 @@ class BaracoaTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Baracoa
      */
-    private $baracoa;
+    protected $baracoa;
 
     public function setUp()
     {
