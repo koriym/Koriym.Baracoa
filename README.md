@@ -17,42 +17,33 @@ composer require koriym/baracoa
 
 ## Basic
 
-Every page rendering needs each JS application which is bundled single JS file. SPA is not that case off course.
-We recommend [webpack](https://webpack.github.io/) for that.
-`$jsBundleDir` is the directory of those files.
+In a JS renderer application, implement `render` function which takes parameter(s) and return html string. 
 
-```php
-$baracoa = new Baracoa($jsBundleDir, new ExceptionHandler(), new V8Js());
+```javascript
+const render = state => (
+  `Hello ${state.name}`
+)
 ```
 
-To render the UI with JS application, Call the `render()` method with JS app name and values to assign.
-In this example, you need to place `handlebar.bundle.js` file in `$jsBundleDir` directory.
+Call the `render()` method with JS app name and values to assign to redner.
 
 ```php
-$html = $baracoa->render('handlesbar', ['name' => 'World']);
+$baracoa = new Baracoa($jsDir, new ExceptionHandler());
+$html = $baracoa->render('min', ['name' => 'World']);
 echo $html; // Hello World
 ```
 
-In JS renderer application, you take `window.__PRELOADED_STATE__` as initial state and set output(html) string to `window.__SERVER_SIDE_MARKUP__`.
-To minimize to depend `Baracoa`, We provide minimum gateway code like this.
-  
-```javascript
+In this example, you need to place `min.bundle.js` JS file in `$jsDir ` directory.
+Every page needs own JS view application which is bundled single file by bundler tool like [webpack](https://webpack.github.io/).
+
+
+Typical entry file is like following code.
+
+```
 import render from './render';
-
-window.__SERVER_SIDE_MARKUP__ = render(window.__PRELOADED_STATE__);
+global.render = render;
 ```
 
-Here is a minimalistic example using `handlesbar` template engine.
- 
-```javascript
-import greetingTemplate from '../template/greeting.handlebars'; // <div>Hello {{ name }}</div>
-
-const render = (preloadedState) => (
-  greetingTemplate(preloadedState); // <div>Hello World</div>
-);
-
-export default render;
-```
 
 In next section we see the example of Redux with React applicaiton example.
 
@@ -105,13 +96,18 @@ const render = (preloadedState, metas) => {
 
 export default render;
 ```
-`window.__SSR_METAS__` data is only used in server side. It is not exposed to in HTML code unlike `window.__PRELOADED_STATE__`. 
-You can also render only root dom with JS and combine page framework with PHP. 
+
+`render()` method can pass second parameter as SSR meta data which is only available in server side rendering. Typically this value is used in `<header>` such as for OGP.
+
+```javascript
+$meta = ['title => 'awesome page':;
+$html = $baracoa->render('min', ['name' => 'World'], meta);
+```
 
 ### The Client Side
 
 
-We need to do is grab the initial state from `window.__PRELOADED_STATE__`, and pass it to our createStore() function as the initial state.
+We need to do is grab the initial state from `window.__PRELOADED_STATE__` which is rendered in server side, and pass it to our `createStore()` function as the initial state.
 
 ```php
 import React from 'react';
