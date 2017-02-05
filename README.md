@@ -99,9 +99,9 @@ export default render;
 
 `render()` method can pass second parameter as SSR meta data which is only available in server side rendering. Typically this value is used in `<header>` such as for OGP.
 
-```javascript
-$meta = ['title => 'awesome page':;
-$html = $baracoa->render('min', ['name' => 'World'], meta);
+```php
+$meta = ['title => 'awesome page'];
+$html = $baracoa->render('min', ['name' => 'World'], $meta);
 ```
 
 ### The Client Side
@@ -109,7 +109,7 @@ $html = $baracoa->render('min', ['name' => 'World'], meta);
 
 We need to do is grab the initial state from `window.__PRELOADED_STATE__` which is rendered in server side, and pass it to our `createStore()` function as the initial state.
 
-```php
+```javascript
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
