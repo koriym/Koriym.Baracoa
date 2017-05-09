@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the Koriym.Baracoa package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Koriym\Baracoa;
 
 use Symfony\Component\Cache\Simple\ArrayCache;
@@ -29,6 +33,7 @@ class CacheBaracoaTest extends BaracoaTest
 
     /**
      * cause "V8Js::createSnapshot(): Failed to create V8 heap snapshot.  Check $embed_source for errors." error
+     *
      * @expectedException \PHPUnit_Framework_Error
      */
     public function testErrorCode()

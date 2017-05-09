@@ -1,8 +1,11 @@
 <?php
-
+/**
+ * This file is part of the Koriym.Baracoa package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Koriym\Baracoa;
 
-use Koriym\Baracoa\Exception\JsFileNotExistsException;
 use V8Js;
 
 class BaracoaTest extends \PHPUnit_Framework_TestCase

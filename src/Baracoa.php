@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Koriym\Baracoa package
+ * This file is part of the Koriym.Baracoa package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -39,7 +39,7 @@ final class Baracoa implements BaracoaInterface
         $this->bundleSrcBasePath = $bundleSrcBasePath;
         $this->handler = $handler;
         $this->v8 = $v8Js;
-        if (is_null($v8Js)) {
+        if ($v8Js === null) {
             $this->execJs = new PhpExecJs();
         }
     }
