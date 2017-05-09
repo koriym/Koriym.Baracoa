@@ -6,9 +6,10 @@
  */
 namespace Koriym\Baracoa;
 
+use PHPUnit\Framework\TestCase;
 use V8Js;
 
-class BaracoaTest extends \PHPUnit_Framework_TestCase
+class BaracoaTest extends TestCase
 {
     /**
      * @var Baracoa
