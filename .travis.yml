@@ -1,16 +1,24 @@
 language: php
-sudo: false
+sudo: required
+dist: trusty
 php:
   - 7.1
   - hhvm
+env:
 cache:
   directories:
     - vendor
     - $HOME/.composer/cache
 env:
+  - V8VER=5.2
   matrix:
     - DEPENDENCIES=""
     - DEPENDENCIES="--prefer-lowest --prefer-stable"
+
+before_install:
+  - make -f Makefile.travis before_install
+install:
+  - make -f Makefile.travis install
 before_script:
   - composer self-update
   - composer update $DEPENDENCIES
@@ -20,3 +28,10 @@ script:
 
 after_script:
   - if [ "$TRAVIS_PHP_VERSION" = "7.1" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+
+env:
+  - V8VER=5.2
+  - V8VER=5.1
+
+before_install: make -f Makefile.travis before_install
+install: make -f Makefile.travis install
