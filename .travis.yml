@@ -22,3 +22,4 @@ before_install:
   - make -f Makefile.travis before_install
 install:
   - make -f Makefile.travis install
+  - make -f Makefile.travis build

@@ -15,6 +15,5 @@ build:
 	phpize
 	./configure CXXFLAGS="-Wall -Wno-write-strings -Werror"
 	$(MAKE) -j3
-
-test: build
-	$(MAKE) test
+	$(MAKE) install
+	echo "extension=v8js.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
