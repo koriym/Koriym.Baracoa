@@ -12,6 +12,8 @@ install:
 	sudo apt-get install -y libv8-$(V8VER)-dev
 
 build:
+    git clone https://github.com/phpv8/v8js.git
+    cd v8js
 	phpize
 	./configure CXXFLAGS="-Wall -Wno-write-strings -Werror"
 	$(MAKE) -j3
