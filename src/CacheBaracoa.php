@@ -1,14 +1,12 @@
 <?php
 /**
- * This file is part of the Koriym\Baracoa package
+ * This file is part of the Koriym.Baracoa package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
 namespace Koriym\Baracoa;
 
 use Koriym\Baracoa\Exception\JsFileNotExistsException;
-use Nacmartin\PhpExecJs\PhpExecJs;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use V8Js;
 

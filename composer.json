@@ -21,10 +21,10 @@
     },
     "require-dev": {
         "phpv8/v8js-stubs": "^1.2.0",
-        "phpunit/phpunit": "~4.8 || ~5.7 || ~6.0",
+        "phpunit/phpunit": "^6.1",
         "squizlabs/php_codesniffer": "^2.8.0",
         "phpmd/phpmd": "^2.6.0",
-        "symfony/cache": "3.3.x-dev"
+        "symfony/cache": "^v3.3.0-BETA1"
     },
     "autoload": {
         "psr-4": {

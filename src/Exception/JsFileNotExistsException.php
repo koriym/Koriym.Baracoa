@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Koriym.Baracoa
+ * This file is part of the Koriym.Baracoa package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */

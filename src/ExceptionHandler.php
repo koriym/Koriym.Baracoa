@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Koriym\Baracoa package
+ * This file is part of the Koriym.Baracoa package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -12,7 +12,7 @@ final class ExceptionHandler implements ExceptionHandlerInterface
     {
         $erroCode = mb_strimwidth($e->getJsSourceLine(), $e->getJsStartColumn(), 240, '...');
         $errorMsg = sprintf(
-            "%s\n%s\nJS Stack trace:\n%s" ,
+            "%s\n%s\nJS Stack trace:\n%s",
             $e->getMessage(),
             $erroCode,
             $e->getJsTrace()

@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file is part of the Koriym.Baracoa package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Koriym\Baracoa;
 
 require dirname(__DIR__, 4) . '/vendor/autoload.php';
