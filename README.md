@@ -1,5 +1,10 @@
 # Baracoa
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/?branch=1.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/?branch=1.x)
+[![Build Status](https://travis-ci.org/koriym/Koriym.Baracoa.svg?branch=1.x)](https://travis-ci.org/koriym/Koriym.Baracoa)
+
+
 ## A JavaScript server side rendering interface
 
 **Bracoa** provides a simple interface for JavaScript server side rendering in PHP.
