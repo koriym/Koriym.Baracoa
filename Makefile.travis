@@ -11,4 +11,4 @@ install:
 	sudo apt-get install -y libv8-$(V8VER)-dev
 	git clone https://github.com/phpv8/v8js.git
 	cd v8js && phpize && ./configure CXXFLAGS="-Wall -Wno-write-strings -Werror" && $(MAKE) -j3 && $(MAKE) install install && cd ..
-	echo "extension=v8js.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+	echo "extension=v8js.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
