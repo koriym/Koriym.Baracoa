@@ -18,8 +18,3 @@ script:
   - wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar && php php-cs-fixer-v2.phar fix --config=.php_cs -v --dry-run --using-cache=no --path-mode=intersection `git diff --name-only --diff-filter=ACMRTUXB $TRAVIS_COMMIT_RANGE`
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-before_install:
-  - make -f Makefile.travis before_install
-install:
-  - make -f Makefile.travis install
-  - make -f Makefile.travis build
