@@ -34,7 +34,7 @@ class CacheBaracoaTest extends BaracoaTest
     /**
      * cause "V8Js::createSnapshot(): Failed to create V8 heap snapshot.  Check $embed_source for errors." error
      *
-     * @expectedException \PHPUnit_Framework_Error_Warning
+     * @expectedException \PHPUnit\Framework\Error\Warning
      */
     public function testErrorCode()
     {
