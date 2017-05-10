@@ -3,7 +3,6 @@ sudo: required
 dist: trusty
 php:
   - 7.1
-  - hhvm
 env:
   - V8VER=5.2
 before_install:
