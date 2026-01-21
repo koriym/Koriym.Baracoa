@@ -1,11 +1,15 @@
 <?php
+
 /**
  * This file is part of the Koriym.Baracoa package.
- *
- * @license http://opensource.org/licenses/MIT MIT
  */
+
+declare(strict_types=1);
+
 namespace Koriym\Baracoa\Exception;
 
-class JsFileNotExistsException extends \RuntimeException
+use RuntimeException;
+
+final class JsFileNotExistsException extends RuntimeException
 {
 }

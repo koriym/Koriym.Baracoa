@@ -1,12 +1,16 @@
 <?php
+
 /**
  * This file is part of the Koriym.Baracoa package.
- *
- * @license http://opensource.org/licenses/MIT MIT
  */
+
+declare(strict_types=1);
+
 namespace Koriym\Baracoa;
+
+use V8JsScriptException;
 
 interface ExceptionHandlerInterface
 {
-    public function __invoke(\V8JsScriptException $e) : string;
+    public function __invoke(V8JsScriptException $e): string;
 }

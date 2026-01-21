@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="1"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/tools/vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
+    autoloader="vendor/autoload.php"
+>
+    <projectFiles>
+        <directory name="src" />
+    </projectFiles>
+    <stubs>
+        <file name="vendor/phpv8/v8js-stubs/src/V8Js.php" />
+        <file name="vendor/phpv8/v8js-stubs/src/V8JsException.php" />
+        <file name="vendor/phpv8/v8js-stubs/src/V8JsScriptException.php" />
+    </stubs>
+</psalm>
