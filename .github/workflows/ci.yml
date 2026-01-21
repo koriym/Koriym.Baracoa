@@ -92,8 +92,8 @@ jobs:
           git clone --branch php8 --depth 1 https://github.com/phpv8/v8js.git /tmp/v8js
           cd /tmp/v8js
           phpize83
-          ./configure --with-php-config=php-config83
-          make
+          ./configure --with-php-config=php-config83 CXXFLAGS="-Wno-error"
+          make CXXFLAGS="-Wno-error -Wno-unused-result"
           make install
           echo "extension=v8js.so" > /etc/php83/conf.d/50_v8js.ini
           # Verify v8js is loaded
