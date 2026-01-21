@@ -85,7 +85,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apk add php83-dev nodejs-dev g++ make
+          apk add php83-dev nodejs-dev g++ make git
         shell: alpine.sh --root {0}
 
       - name: Build v8js extension
