@@ -96,7 +96,7 @@ jobs:
           ./configure
           make
           make install
-        shell: alpine.sh {0}
+        shell: alpine.sh --root {0}
 
       - name: Install PHP packages and test
         run: |
