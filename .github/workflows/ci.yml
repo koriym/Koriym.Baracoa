@@ -103,7 +103,7 @@ jobs:
           git clone --depth=1 --branch php8 https://github.com/phpv8/v8js.git /tmp/v8js
           cd /tmp/v8js
           phpize81
-          ./configure --with-php-config=/usr/bin/php-config81 --with-v8js=/usr
+          ./configure --with-php-config=/usr/bin/php-config81 --with-v8js=/usr/include/node
           make -j$(nproc)
           make install
           echo "extension=v8js.so" > /etc/php81/conf.d/v8js.ini
