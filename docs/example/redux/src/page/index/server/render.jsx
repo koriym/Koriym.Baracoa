@@ -2,7 +2,6 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import escape from 'escape-html';
-import serialize from 'serialize-javascript';
 import App from '../containers/App';
 import configureStore from '../store/configureStore';
 
@@ -13,6 +12,8 @@ const render = (preloadedState, metas) => {
       <App />
     </Provider>,
   );
+  // Escape </script> tags to prevent XSS
+  const serializedState = JSON.stringify(preloadedState).replace(/</g, '\\u003c');
   return `<!doctype html>
     <html>
       <head>
@@ -21,7 +22,7 @@ const render = (preloadedState, metas) => {
       <body>
         <div id="root">${root}</div>
         <script>
-          window.__PRELOADED_STATE__ = ${serialize(preloadedState)}
+          window.__PRELOADED_STATE__ = ${serializedState}
         </script>
         <script src="/build/index.bundle.js"></script>
       </body>

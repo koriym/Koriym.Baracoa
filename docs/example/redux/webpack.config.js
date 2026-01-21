@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'production',
   entry: {
     index: './src/page/index/client',
     index_ssr: './src/page/index/server',
@@ -10,15 +11,23 @@ module.exports = {
     filename: '[name].bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loaders: ['babel-loader'],
         exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
       },
-    ]
+    ],
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    fallback: {
+      buffer: false,
+    },
   },
 };
