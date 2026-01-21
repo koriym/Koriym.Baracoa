@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Koriym\Baracoa;
 
 use Koriym\Baracoa\Exception\JsFileNotExistsException;
-use Nacmartin\PhpExecJs\PhpExecJs;
+use Koriym\Baracoa\PhpExecJs\PhpExecJs;
 use Override;
 use V8Js;
 use V8JsScriptException;

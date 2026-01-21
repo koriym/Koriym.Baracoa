@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": ">=8.2",
-        "nacmartin/phpexecjs": "^3.1",
-        "psr/simple-cache": "^3.0"
+        "psr/simple-cache": "^3.0",
+        "symfony/process": "^6.0 || ^7.0"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",

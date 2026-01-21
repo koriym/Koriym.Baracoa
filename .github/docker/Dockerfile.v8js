@@ -1,0 +1,81 @@
+# PHP 8.5 + V8Js Docker Image
+# Based on https://github.com/phpv8/v8js/blob/php8/README.Linux.md
+
+ARG PHP_VERSION=8.5
+ARG V8_VERSION=12.4.254.21
+
+FROM php:${PHP_VERSION}-cli AS builder
+
+ARG V8_VERSION
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    python3 \
+    python3-pip \
+    pkg-config \
+    libglib2.0-dev \
+    build-essential \
+    ninja-build \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install depot_tools
+RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git /opt/depot_tools
+ENV PATH="/opt/depot_tools:${PATH}"
+
+# Fetch and build V8
+WORKDIR /tmp/v8
+RUN fetch v8 \
+    && cd v8 \
+    && git checkout ${V8_VERSION} \
+    && gclient sync -D
+
+WORKDIR /tmp/v8/v8
+RUN tools/dev/v8gen.py -vv x64.release -- \
+    is_component_build=true \
+    use_custom_libcxx=false \
+    v8_enable_sandbox=false
+
+RUN ninja -C out.gn/x64.release
+
+# Install V8 to /opt/v8
+RUN mkdir -p /opt/v8/{lib,include} \
+    && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin /opt/v8/lib/ \
+    && cp -R include/* /opt/v8/include/
+
+# Build v8js extension
+WORKDIR /tmp
+RUN git clone --depth=1 --branch php8 https://github.com/phpv8/v8js.git
+
+WORKDIR /tmp/v8js
+RUN phpize \
+    && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" CPPFLAGS="-DV8_COMPRESS_POINTERS -DV8_ENABLE_SANDBOX=0" \
+    && make -j$(nproc) \
+    && make install
+
+# Final image
+FROM php:${PHP_VERSION}-cli
+
+# Copy V8 libraries
+COPY --from=builder /opt/v8 /opt/v8
+
+# Copy v8js extension
+COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-*/v8js.so /usr/local/lib/php/extensions/
+
+# Configure extension
+RUN echo "extension=v8js.so" > /usr/local/etc/php/conf.d/v8js.ini
+
+# Set library path
+ENV LD_LIBRARY_PATH="/opt/v8/lib:${LD_LIBRARY_PATH}"
+
+# Verify installation
+RUN php -m | grep v8js
+
+# Install common tools
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app

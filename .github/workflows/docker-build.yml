@@ -1,0 +1,82 @@
+name: Build V8Js Docker Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      php_version:
+        description: 'PHP Version'
+        required: true
+        default: '8.5'
+        type: choice
+        options:
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+      v8_version:
+        description: 'V8 Version'
+        required: true
+        default: '12.4.254.21'
+  schedule:
+    # Monthly build on the 1st at 00:00 UTC
+    - cron: '0 0 1 * *'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/php-v8js
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set versions
+        id: versions
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "php_version=${{ inputs.php_version }}" >> $GITHUB_OUTPUT
+            echo "v8_version=${{ inputs.v8_version }}" >> $GITHUB_OUTPUT
+          else
+            echo "php_version=8.5" >> $GITHUB_OUTPUT
+            echo "v8_version=12.4.254.21" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ steps.versions.outputs.php_version }}
+            type=raw,value=${{ steps.versions.outputs.php_version }}-v8-${{ steps.versions.outputs.v8_version }}
+            type=raw,value=latest,enable=${{ steps.versions.outputs.php_version == '8.5' }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .github/docker/Dockerfile.v8js
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            PHP_VERSION=${{ steps.versions.outputs.php_version }}
+            V8_VERSION=${{ steps.versions.outputs.v8_version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

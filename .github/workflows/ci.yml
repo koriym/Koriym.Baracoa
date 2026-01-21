@@ -74,3 +74,37 @@ jobs:
       - name: Run PHP_CodeSniffer
         run: ./vendor/bin/phpcs
 
+  v8js-test:
+    name: PHPUnit with V8Js (Docker)
+    runs-on: ubuntu-latest
+    container:
+      image: interposition/8.4.14-fpm-trixie-v8js:v1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify V8Js
+        run: php -m | grep v8js
+
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          apt-get install -y npm unzip git
+
+      - name: Install Composer
+        run: |
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          php -r "unlink('composer-setup.php');"
+
+      - name: Build Redux example
+        run: |
+          cd docs/example/redux
+          npm install
+          npm run build
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress
+
+      - name: Run PHPUnit
+        run: ./vendor/bin/phpunit
+
