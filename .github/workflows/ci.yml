@@ -94,6 +94,7 @@ jobs:
           cd /tmp/v8js
           phpize83
           ./configure --with-php-config=php-config83
+          export CXXFLAGS="-Wno-unused-result"
           make
           make install
         shell: alpine.sh --root {0}
