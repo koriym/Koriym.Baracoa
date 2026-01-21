@@ -21,7 +21,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: v8js
           tools: composer:v2
 
       - name: Build Redux example
@@ -46,7 +45,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: v8js
           tools: composer:v2
 
       - name: Install dependencies

@@ -10,12 +10,14 @@ namespace Koriym\Baracoa;
 
 use Koriym\Baracoa\Exception\JsFileNotExistsException;
 use Override;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use V8Js;
 use V8JsScriptException;
 
 use function dirname;
+use function extension_loaded;
 use function file_exists;
 
 class BaracoaTest extends TestCase
@@ -31,15 +33,18 @@ class BaracoaTest extends TestCase
             throw new RuntimeException("{$bundleFile} is not build. See tests/README");
         }
 
-        $this->baracoa = new Baracoa($appBundleJsPath, new ExceptionHandler(), new V8Js());
+        $v8js = extension_loaded('v8js') ? new V8Js() : null;
+        $this->baracoa = new Baracoa($appBundleJsPath, new ExceptionHandler(), $v8js);
     }
 
+    #[RequiresPhpExtension('v8js')]
     public function testNoJsFile(): void
     {
         $this->expectException(JsFileNotExistsException::class);
         $this->baracoa->render('__NOT_EXISTS__', [], []);
     }
 
+    #[RequiresPhpExtension('v8js')]
     public function testInvoke(): void
     {
         $state = ['hello' => ['name' => 'SSR']];
@@ -50,6 +55,7 @@ class BaracoaTest extends TestCase
         $this->assertStringContainsString('<!-- react-text: 3 -->Hello <!-- /react-text --><!-- react-text: 4 -->SSR<!-- /react-text -->', $html);
     }
 
+    #[RequiresPhpExtension('v8js')]
     public function testErrorCode(): void
     {
         $this->expectException(V8JsScriptException::class);

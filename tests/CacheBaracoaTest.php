@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Koriym\Baracoa;
 
 use Override;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use RuntimeException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Psr16Cache;
@@ -17,6 +18,7 @@ use V8JsScriptException;
 use function dirname;
 use function file_exists;
 
+#[RequiresPhpExtension('v8js')]
 class CacheBaracoaTest extends BaracoaTest
 {
     #[Override]
