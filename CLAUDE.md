@@ -64,3 +64,20 @@ const render = (state, metas) => `<html>...</html>`;
 
 - `JsFileNotExistsException` - Thrown when bundle file not found
 - `ExceptionHandlerInterface` - Handles V8JsScriptException, default implementation re-throws with enhanced error info
+
+## Testing
+
+### V8Js Tests
+
+V8Js tests require the V8Js PHP extension which is difficult to install in CI environments (GitHub Actions). The V8 engine has complex build dependencies and API compatibility issues between versions.
+
+- **CI**: Tests requiring V8Js are skipped using `#[RequiresPhpExtension('v8js')]`. Only PhpExecJs fallback tests run.
+- **Local**: Install V8Js extension to run full test suite including V8Js tests.
+
+#### Installing V8Js locally (macOS)
+
+```bash
+brew install shivammathur/extensions/v8js@8.4
+```
+
+See [README.md](README.md#install-v8js) for more installation options.
