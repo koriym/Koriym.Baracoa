@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - PHP 8.2+ support with typed properties and constructor property promotion
-- PHPUnit 12 support
+- PHPUnit 11 support
 - PHPStan (level max) static analysis
 - Psalm (errorLevel 1) static analysis
 - Doctrine Coding Standard with PHP_CodeSniffer
@@ -21,6 +21,8 @@ All notable changes to this project will be documented in this file.
 - Updated `symfony/cache` to ^7.2
 - Modernized code with PHP 8.2+ features (readonly properties, typed properties)
 - Replaced yarn with npm in documentation
+- Upgraded Redux example to React 18.3, Redux 5, webpack 5, Babel 7
+- Upgraded Handlesbar example to webpack 5, Babel 7, Handlebars 4.7
 
 ### Removed
 

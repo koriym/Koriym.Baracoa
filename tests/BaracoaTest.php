@@ -51,8 +51,7 @@ class BaracoaTest extends TestCase
         $metas = ['title' => '<page-title>'];
         $html = $this->baracoa->render('index_ssr', $state, $metas);
         $this->assertStringContainsString('window.__PRELOADED_STATE__ = {"hello":{"name":"SSR"}}', $html);
-        $this->assertStringContainsString('<div id="root"><div data-reactroot="" data-reactid="1" data-react-checksum=', $html);
-        $this->assertStringContainsString('<!-- react-text: 3 -->Hello <!-- /react-text --><!-- react-text: 4 -->SSR<!-- /react-text -->', $html);
+        $this->assertStringContainsString('<div id="root"><div><h1>Hello <!-- -->SSR</h1>', $html);
     }
 
     #[RequiresPhpExtension('v8js')]
@@ -71,7 +70,6 @@ class BaracoaTest extends TestCase
         $metas = ['title' => '<page-title>'];
         $html = $this->baracoa->render('index_ssr', $state, $metas);
         $this->assertStringContainsString('window.__PRELOADED_STATE__ = {"hello":{"name":"SSR"}}', $html);
-        $this->assertStringContainsString('<div id="root"><div data-reactroot="" data-reactid="1" data-react-checksum=', $html);
-        $this->assertStringContainsString('<!-- react-text: 3 -->Hello <!-- /react-text --><!-- react-text: 4 -->SSR<!-- /react-text -->', $html);
+        $this->assertStringContainsString('<div id="root"><div><h1>Hello <!-- -->SSR</h1>', $html);
     }
 }
