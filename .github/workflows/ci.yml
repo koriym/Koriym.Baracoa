@@ -74,3 +74,44 @@ jobs:
       - name: Run PHP_CodeSniffer
         run: ./vendor/bin/phpcs
 
+  v8js-test:
+    name: PHPUnit with V8Js (Alpine 3.16)
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:3.16
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apk add --no-cache \
+            php81 php81-dev php81-phar php81-mbstring php81-openssl php81-curl php81-dom php81-xml php81-xmlwriter php81-tokenizer php81-simplexml \
+            composer npm git \
+            nodejs-dev \
+            build-base python3
+
+      - name: Build V8Js extension
+        run: |
+          git clone --depth=1 --branch php8 https://github.com/phpv8/v8js.git /tmp/v8js
+          cd /tmp/v8js
+          phpize81
+          ./configure --with-php-config=/usr/bin/php-config81 --with-v8js=/usr
+          make -j$(nproc)
+          make install
+          echo "extension=v8js.so" > /etc/php81/conf.d/v8js.ini
+
+      - name: Verify V8Js
+        run: php81 -m | grep v8js
+
+      - name: Build Redux example
+        run: |
+          cd docs/example/redux
+          npm install
+          npm run build
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress
+
+      - name: Run PHPUnit
+        run: php81 vendor/bin/phpunit
+
