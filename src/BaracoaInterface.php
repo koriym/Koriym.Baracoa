@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the Koriym.Baracoa package.
- *
- * @license http://opensource.org/licenses/MIT MIT
  */
+
+declare(strict_types=1);
+
 namespace Koriym\Baracoa;
 
 interface BaracoaInterface
@@ -11,11 +13,8 @@ interface BaracoaInterface
     /**
      * Render by JS application
      *
-     * @param string $appName JS app name "[$appName].bundle.js"
-     * @param array  $store   initial state
-     * @param array  $metas   meta data for renderer page
-     *
-     * @return string
+     * @param array<string, mixed> $store initial state
+     * @param array<string, mixed> $metas meta data for renderer page
      */
-    public function render(string $appName, array $store, array $metas = []) : string;
+    public function render(string $appName, array $store, array $metas = []): string;
 }

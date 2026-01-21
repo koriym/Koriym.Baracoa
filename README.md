@@ -1,22 +1,19 @@
 # Baracoa
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/?branch=1.x)
-[![Code Coverage](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/koriym/Koriym.Baracoa/?branch=1.x)
-[![Build Status](https://travis-ci.org/koriym/Koriym.Baracoa.svg?branch=1.x)](https://travis-ci.org/koriym/Koriym.Baracoa)
+[![CI](https://github.com/koriym/Koriym.Baracoa/actions/workflows/ci.yml/badge.svg)](https://github.com/koriym/Koriym.Baracoa/actions/workflows/ci.yml)
 
+A JavaScript server side rendering interface for PHP.
 
-## A JavaScript server side rendering interface
-
-**Bracoa** provides a simple interface for JavaScript server side rendering in PHP.
+**Baracoa** provides a simple interface for JavaScript server side rendering in PHP.
 
 ## Prerequisites
 
- * php7.1
- * [V8Js](http://php.net/v8js) 
+ * PHP 8.2+
+ * [V8Js](http://php.net/v8js) (optional, PhpExecJs used as fallback) 
 
 ## Installation
-   
-```
+
+```bash
 composer require koriym/baracoa
 ```
 
@@ -44,7 +41,7 @@ Every page needs own JS view application which is bundled single file by bundler
 
 Typical entry file is like following code.
 
-```
+```javascript
 import render from './render';
 global.render = render;
 ```
@@ -150,50 +147,50 @@ See more detail in this blog post.
 
 ### min
 
-```
+```bash
 git clone git@github.com:koriym/Koriym.Baracoa.git
 cd Koriym.Baracoa
 composer install
 cd docs/example/min
 php index.php
-// HelloWorld
+# HelloWorld
 ```
 
 ### handlebar
 
-```
+```bash
 cd docs/example/handlesbar
-yarn install
-yarn run build
+npm install
+npm run build
 php public/index.php
-
-// <!doctype html>
-// ...
+# <!doctype html>
+# ...
 ```
 
 ### redux react
 
-```
+```bash
 cd docs/example/redux
-yarn install
-yarn run build
-yarn start
+npm install
+npm run build
+npm start
 ```
 
 ## Install V8Js
 
-### OSX
+### macOS
 
-```
-brew update
-brew install homebrew/php/php71-v8js
+Using [shivammathur/homebrew-extensions](https://github.com/shivammathur/homebrew-extensions):
+
+```bash
+brew install shivammathur/extensions/v8js@8.4
 ```
 
-edit `php.ini` or add 'V8Js.ini'
+(Replace `8.4` with your PHP version)
 
-```
-extension="/usr/local/opt/php71-v8js/v8js.so"
-```
+### Linux
+
+See the [V8Js README](https://github.com/phpv8/v8js) for installation instructions.
 
 ## JS UI Application Skeleton
 

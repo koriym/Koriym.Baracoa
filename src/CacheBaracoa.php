@@ -1,83 +1,80 @@
 <?php
+
 /**
  * This file is part of the Koriym.Baracoa package.
- *
- * @license http://opensource.org/licenses/MIT MIT
  */
+
+declare(strict_types=1);
+
 namespace Koriym\Baracoa;
 
 use Koriym\Baracoa\Exception\JsFileNotExistsException;
+use Override;
 use Psr\SimpleCache\CacheInterface;
 use V8Js;
+use V8JsScriptException;
+
+use function file_exists;
+use function file_get_contents;
+use function json_encode;
+use function sprintf;
 
 final class CacheBaracoa implements BaracoaInterface
 {
-    /**
-     * @var string
-     */
-    private $bundleSrcBasePath;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var ExceptionHandlerInterface
-     */
-    private $handler;
-
-    public function __construct(string $bundleSrcBasePath, ExceptionHandlerInterface $handler, CacheInterface $cache)
-    {
-        $this->bundleSrcBasePath = $bundleSrcBasePath;
-        $this->handler = $handler;
-        $this->cache = $cache;
+    public function __construct(
+        private readonly string $bundleSrcBasePath,
+        private readonly ExceptionHandlerInterface $handler,
+        private readonly CacheInterface $cache,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function render(string $appName, array $store, array $metas = []) : string
+    /** @inheritDoc */
+    #[Override]
+    public function render(string $appName, array $store, array $metas = []): string
     {
         if (! $this->cache->has($appName)) {
             $this->saveSnapshot($appName);
         }
+
+        /** @var string $snapShot */
         $snapShot = $this->cache->get($appName);
-        $v8 = new V8Js('PHP', [], [], true, $snapShot);
+        /** @psalm-suppress InvalidArgument */
+        $v8 = new V8Js('PHP', [], $snapShot); // @phpstan-ignore argument.type
         try {
+            /** @var string $html */
             $html = $v8->executeString($this->getSsrCode($store, $metas));
-        } catch (\V8JsScriptException $e) {
-            $handler = $this->handler;
-            $html = $handler($e);
+        } catch (V8JsScriptException $e) {
+            $html = ($this->handler)($e);
         }
 
         return $html;
     }
 
-    /**
-     * @param string $appName
-     */
-    private function saveSnapshot(string $appName) : void
+    private function saveSnapshot(string $appName): void
     {
         $bundleSrcPath = sprintf('%s/%s.bundle.js', $this->bundleSrcBasePath, $appName);
         if (! file_exists($bundleSrcPath)) {
             throw new JsFileNotExistsException($bundleSrcPath);
         }
-        $bundleSrc = file_get_contents($bundleSrcPath);
-        $snapShot = \V8Js::createSnapshot($bundleSrc);
+
+        $bundleSrc = (string) file_get_contents($bundleSrcPath);
+        $snapShot = V8Js::createSnapshot($bundleSrc);
         $this->cache->set($appName, $snapShot);
     }
 
-    private function getSsrCode(array $store, array $metas) : string
+    /**
+     * @param array<string, mixed> $store
+     * @param array<string, mixed> $metas
+     */
+    private function getSsrCode(array $store, array $metas): string
     {
         $storeJson = json_encode($store);
         $metasJson = json_encode($metas);
-        $code = <<< "EOT"
+
+        return <<<EOT
 var console = {warn: function(){}, error: function(){}};
 var global = global || this, self = self || this, window = window || this;
 render($storeJson, $metasJson);
 EOT;
-
-        return $code;
     }
 }

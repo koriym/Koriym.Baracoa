@@ -15,16 +15,15 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
-        "nacmartin/phpexecjs": "^0.8.7",
-        "psr/simple-cache": "^1.0"
+        "php": ">=8.2",
+        "nacmartin/phpexecjs": "^3.1",
+        "psr/simple-cache": "^3.0"
     },
     "require-dev": {
-        "phpv8/v8js-stubs": "^1.2.0",
-        "phpunit/phpunit": "^6.1",
-        "squizlabs/php_codesniffer": "^2.8.0",
-        "phpmd/phpmd": "^2.6.0",
-        "symfony/cache": "^v3.3.0-BETA1"
+        "bamarni/composer-bin-plugin": "^1.8",
+        "phpunit/phpunit": "^12.0",
+        "phpv8/v8js-stubs": "^1.4",
+        "symfony/cache": "^7.2"
     },
     "autoload": {
         "psr-4": {
@@ -42,22 +41,48 @@
         "ext-v8js": "Needed to support V8"
     },
     "scripts": {
-        "test": [
-            "phpmd src text ./phpmd.xml",
-            "phpcs src tests/*.php",
-            "phpunit"
-        ],
-        "cs-fix": [
-            "php-cs-fixer fix --config-file=./.php_cs",
-            "phpcbf src"
-        ],
-        "build": [
-            "rm -rf ./build; mkdir -p ./build/logs ./build/pdepend ./build/api",
-            "pdepend --jdepend-xml=./build/logs/jdepend.xml --jdepend-chart=./build/pdepend/dependencies.svg --overview-pyramid=./build/pdepend/overview-pyramid.svg src",
-            "phploc --log-csv ./build/logs/phploc.csv src",
-            "phpcs --report=checkstyle --report-file=./build/logs/checkstyle.xml --standard=phpcs.xml src",
-            "apigen generate -s src -d build/api --debug",
-            "@test"
-        ]
+        "bin": "echo 'bin not installed'",
+        "test": "phpunit",
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage phpunit --coverage-text --coverage-html=build/coverage",
+        "pcov": "php -dextension=pcov.so -d pcov.enabled=1 phpunit --coverage-text --coverage-html=build/coverage --coverage-clover=build/coverage.xml",
+        "cs": "phpcs",
+        "cs-fix": "phpcbf src tests",
+        "phpstan": "phpstan analyse -c phpstan.neon",
+        "psalm": "psalm --show-info=false",
+        "phpmd": "phpmd src text ./phpmd.xml",
+        "baseline": "phpstan analyse -c phpstan.neon --generate-baseline --allow-empty-baseline && psalm --set-baseline=psalm-baseline.xml",
+        "metrics": "phpmetrics --report-html=build/metrics --exclude=Exception src",
+        "clean": ["phpstan clear-result-cache", "psalm --clear-cache"],
+        "sa": ["@phpstan", "@psalm"],
+        "tests": ["@cs", "@sa", "@test"],
+        "build": ["@clean", "@cs", "@sa", "@coverage", "@metrics"]
+    },
+    "scripts-descriptions": {
+        "bin": "bamarni/composer-bin-plugin command",
+        "test": "Run unit tests",
+        "coverage": "Generate test coverage report",
+        "pcov": "Generate test coverage report (pcov)",
+        "cs": "Check the coding style",
+        "cs-fix": "Fix the coding style",
+        "phpmd": "Analyze PHP code for potential issues",
+        "clean": "Remove temporary files",
+        "psalm": "Analyze code for type safety using Psalm",
+        "phpstan": "Analyze code for errors using PHPStan",
+        "sa": "Run static analysis",
+        "baseline": "Generate baseline for PHPStan and Psalm",
+        "metrics": "Build metrics report",
+        "tests": "Run tests and quality checks",
+        "build": "Build project"
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
+    },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": true,
+            "forward-command": true
+        }
     }
 }
