@@ -14,6 +14,7 @@
     </projectFiles>
     <stubs>
         <file name="vendor/phpv8/v8js-stubs/src/V8Js.php" />
+        <file name="vendor/phpv8/v8js-stubs/src/V8JsException.php" />
         <file name="vendor/phpv8/v8js-stubs/src/V8JsScriptException.php" />
     </stubs>
 </psalm>
