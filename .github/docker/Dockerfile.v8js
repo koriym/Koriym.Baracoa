@@ -4,7 +4,8 @@
 ARG PHP_VERSION=8.5
 ARG V8_VERSION=12.4.254.21
 
-FROM php:${PHP_VERSION}-cli AS builder
+# Stage 1: Build V8 using Debian Bullseye (has Python 3.9)
+FROM debian:bullseye AS v8-builder
 
 ARG V8_VERSION
 
@@ -18,6 +19,8 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-dev \
     build-essential \
     ninja-build \
+    lsb-release \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Install depot_tools
@@ -44,6 +47,18 @@ RUN mkdir -p /opt/v8/{lib,include} \
     && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin /opt/v8/lib/ \
     && cp -R include/* /opt/v8/include/
 
+# Stage 2: Build v8js extension
+FROM php:${PHP_VERSION}-cli AS builder
+
+# Install build dependencies for v8js
+RUN apt-get update && apt-get install -y \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy V8 from previous stage
+COPY --from=v8-builder /opt/v8 /opt/v8
+
 # Build v8js extension
 WORKDIR /tmp
 RUN git clone --depth=1 --branch php8 https://github.com/phpv8/v8js.git
@@ -67,7 +82,7 @@ COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-*/v8js.so /us
 RUN echo "extension=v8js.so" > /usr/local/etc/php/conf.d/v8js.ini
 
 # Set library path
-ENV LD_LIBRARY_PATH="/opt/v8/lib:${LD_LIBRARY_PATH}"
+ENV LD_LIBRARY_PATH="/opt/v8/lib"
 
 # Verify installation
 RUN php -m | grep v8js
