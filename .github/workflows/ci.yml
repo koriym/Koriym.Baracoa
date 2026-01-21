@@ -90,6 +90,14 @@ jobs:
             nodejs-dev \
             build-base python3
 
+      - name: Debug V8 location
+        run: |
+          echo "=== Searching for V8 headers ==="
+          find /usr -name "v8.h" 2>/dev/null || echo "v8.h not found"
+          find /usr -name "libv8*" 2>/dev/null || echo "libv8 not found"
+          echo "=== Package contents ==="
+          apk info -L nodejs-dev | head -50
+
       - name: Build V8Js extension
         run: |
           git clone --depth=1 --branch php8 https://github.com/phpv8/v8js.git /tmp/v8js
