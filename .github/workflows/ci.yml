@@ -75,44 +75,26 @@ jobs:
         run: ./vendor/bin/phpcs
 
   v8js-test:
-    name: PHPUnit with V8Js (Ubuntu)
-    runs-on: ubuntu-22.04
+    name: PHPUnit with V8Js (Docker)
+    runs-on: ubuntu-latest
+    container:
+      image: interposition/8.4.14-fpm-trixie-v8js:latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          tools: composer:v2
-
-      - name: Install V8 and build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y software-properties-common
-          sudo add-apt-repository -y ppa:phoerious/libv8
-          sudo apt-get update
-          sudo apt-get install -y libv8-dev php-dev
-
-      - name: Debug V8 location
-        run: |
-          echo "=== Searching for V8 ==="
-          find /usr -name "v8.h" 2>/dev/null | head -5
-          find /usr -name "libv8*" 2>/dev/null | head -10
-          pkg-config --cflags --libs v8 2>/dev/null || echo "v8 pkg-config not found"
-
-      - name: Build V8Js extension
-        run: |
-          git clone --depth=1 --branch php8 https://github.com/phpv8/v8js.git /tmp/v8js
-          cd /tmp/v8js
-          phpize
-          ./configure
-          make -j$(nproc)
-          sudo make install
-          echo "extension=v8js.so" | sudo tee /etc/php/8.2/cli/conf.d/v8js.ini
-
       - name: Verify V8Js
         run: php -m | grep v8js
+
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          apt-get install -y npm unzip git
+
+      - name: Install Composer
+        run: |
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          php -r "unlink('composer-setup.php');"
 
       - name: Build Redux example
         run: |
