@@ -83,41 +83,31 @@ jobs:
       - name: Setup Alpine Linux
         uses: jirutka/setup-alpine@v1
 
-      - name: Install dependencies and build v8js
+      - name: Install dependencies
         run: |
-          apk add php83 php83-dev php83-phar php83-iconv php83-mbstring php83-openssl php83-curl php83-dom php83-xml php83-xmlwriter php83-tokenizer php83-simplexml php83-ctype nodejs-dev g++ make git curl
-          # Install composer
-          curl -sS https://getcomposer.org/installer | php83 -- --install-dir=/usr/local/bin --filename=composer
-          # Build v8js extension from php8 branch
+          apk add php83-dev nodejs-dev g++ make
+        shell: alpine.sh --root {0}
+
+      - name: Build v8js extension
+        run: |
           git clone --branch php8 --depth 1 https://github.com/phpv8/v8js.git /tmp/v8js
           cd /tmp/v8js
-          phpize83
-          # Disable -Werror in Makefile after configure
-          ./configure --with-php-config=php-config83
-          sed -i 's/-Werror/-Wno-error/g' Makefile
+          phpize
+          ./configure
           make
           make install
+        shell: alpine.sh {0}
+
+      - name: Install PHP packages and test
+        run: |
+          apk add php83 php83-phar php83-iconv php83-mbstring php83-openssl php83-curl php83-dom php83-xml php83-xmlwriter php83-tokenizer php83-simplexml php83-ctype npm git curl
           echo "extension=v8js.so" > /etc/php83/conf.d/50_v8js.ini
-          # Verify v8js is loaded
           php83 -m | grep v8js
-        shell: alpine.sh --root {0}
-
-      - name: Build Redux example
-        run: |
-          apk add npm
-          cd docs/example/redux
-          npm install
-          npm run build
-        shell: alpine.sh --root {0}
-
-      - name: Install project dependencies
-        run: |
-          cd $GITHUB_WORKSPACE
+          # Install composer
+          curl -sS https://getcomposer.org/installer | php83 -- --install-dir=/usr/local/bin --filename=composer
+          # Build Redux example
+          cd docs/example/redux && npm install && npm run build && cd ../../..
+          # Install and test
           composer install --no-progress
-        shell: alpine.sh {0}
-
-      - name: Run PHPUnit with V8Js
-        run: |
-          cd $GITHUB_WORKSPACE
           php83 vendor/bin/phpunit
-        shell: alpine.sh {0}
+        shell: alpine.sh --root {0}
