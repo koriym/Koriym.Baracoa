@@ -88,8 +88,8 @@ jobs:
           apk add php83 php83-dev php83-phar php83-iconv php83-mbstring php83-openssl php83-curl php83-dom php83-xml php83-xmlwriter php83-tokenizer php83-simplexml php83-ctype nodejs-dev g++ make git curl
           # Install composer
           curl -sS https://getcomposer.org/installer | php83 -- --install-dir=/usr/local/bin --filename=composer
-          # Build v8js extension
-          git clone https://github.com/phpv8/v8js.git /tmp/v8js
+          # Build v8js extension from php8 branch
+          git clone --branch php8 --depth 1 https://github.com/phpv8/v8js.git /tmp/v8js
           cd /tmp/v8js
           phpize83
           ./configure --with-php-config=php-config83
