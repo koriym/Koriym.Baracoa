@@ -1,23 +1,31 @@
+const path = require('path');
+
 module.exports = {
+  mode: 'production',
   entry: {
     handlesbar: './src/server',
   },
   output: {
-    path: 'public/build',
+    path: path.resolve(__dirname, 'public/build'),
     filename: '[name].bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loaders: ['babel-loader'],
         exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
       {
         test: /\.handlebars$/,
-        loaders: ['handlebars-loader'],
         exclude: /node_modules/,
-      }
-    ]
-  }
+        use: 'handlebars-loader',
+      },
+    ],
+  },
 };
