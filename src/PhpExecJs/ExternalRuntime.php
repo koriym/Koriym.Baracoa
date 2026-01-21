@@ -17,7 +17,6 @@ use function file_put_contents;
 use function getenv;
 use function is_dir;
 use function is_executable;
-use function is_string;
 use function is_writable;
 use function json_decode;
 use function json_encode;
