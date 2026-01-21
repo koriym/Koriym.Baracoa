@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-01-22
+
+### Added
+
+- V8Js CI testing with Docker image
+- Dockerfile for building custom PHP + V8Js images
+- GitHub Actions workflow for Docker image builds (`docker-build.yml`)
+
+### Changed
+
+- Internalized `nacmartin/phpexecjs` library to `Koriym\Baracoa\PhpExecJs` namespace
+- Replaced `nacmartin/phpexecjs` dependency with `symfony/process`
+- Fixed PHP 8.2+ deprecation warnings from phpexecjs
+
+### Removed
+
+- External dependency on `nacmartin/phpexecjs` (unmaintained)
+
 ## [1.1.0] - 2026-01-22
 
 ### Added
