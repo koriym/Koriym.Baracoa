@@ -35,12 +35,17 @@ RUN fetch v8 \
     && gclient sync -D
 
 WORKDIR /tmp/v8/v8
+
+# Install amd64 sysroot (required when cross-compiling from ARM64)
+RUN python3 build/linux/sysroot_scripts/install-sysroot.py --arch=amd64
+
 RUN tools/dev/v8gen.py -vv x64.release -- \
     is_component_build=true \
     use_custom_libcxx=false \
     v8_enable_sandbox=false
 
-RUN ninja -C out.gn/x64.release
+# Limit parallel jobs to reduce memory usage (V8 build is very memory-intensive with QEMU emulation)
+RUN ninja -j2 -C out.gn/x64.release
 
 # Install V8 to /opt/v8
 RUN mkdir -p /opt/v8/{lib,include} \
